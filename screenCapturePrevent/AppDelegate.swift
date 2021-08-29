@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  screenCapturePrevent
 //
-//  Created by JYG on 2021/08/28.
+//  Created by Chanwoo Cho on 2021/08/28.
 //
 
 import UIKit
