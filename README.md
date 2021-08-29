@@ -7,7 +7,7 @@
 ***
 ### 실행동작
 - #### 화면 캡쳐
-![Simulator Screen Recording - iPhone 11 - 2021-08-29 at 09 37 32](https://user-images.githubusercontent.com/72292617/131234420-33e27735-61f3-486d-a85a-621dcd1fb32f.gif)
+  ![Simulator Screen Recording - iPhone 11 - 2021-08-29 at 09 37 32](https://user-images.githubusercontent.com/72292617/131234420-33e27735-61f3-486d-a85a-621dcd1fb32f.gif)
 - #### 화면 녹화
   Xcode 시뮬레이터에서 실제 디바이스의 화면기록과 동일한 기능이 없어 흐름의 순서로 설명
   1. 녹화 시 아래와 같이 화면이 숨겨져 검은 화면 녹화
