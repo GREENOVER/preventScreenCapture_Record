@@ -14,4 +14,9 @@
   2. 녹화 중단 시 얼럿 노출
   3. 실제 앨범에 들어가면 녹화되 파일의 화면이 전부 가려져서 저장
   <img src="https://user-images.githubusercontent.com/72292617/131234686-a1c84c58-6bb5-4e0f-9c50-638510808a33.gif" width="300" height= "600">
-
+***
+### 추가기능
+- #### 화면 캡쳐 후 스크린샷 미삭제 시 주의 얼럿
+  ![Simulator Screen Recording - iPhone 11 - 2021-08-31 at 11 03 24](https://user-images.githubusercontent.com/72292617/131429818-3d3c0275-7c1d-4950-b291-46f44ceb3f99.gif)
+- #### 화면 녹화 시 검은화면 대신 주의 텍스트를 가진 커스텀 뷰 노출
+  <img src="https://user-images.githubusercontent.com/72292617/131429974-d96f8e8f-07f9-46a1-9207-cc568e99a8f4.png" width="300" height= "600">
