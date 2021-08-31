@@ -13,6 +13,7 @@ import Photos
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   
   var window: UIWindow?
+  let preventAnnounceView = UIView(frame: CGRect.init(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
   
   
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -55,7 +56,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // Called as the scene transitions from the background to the foreground.
     // Use this method to undo the changes made on entering the background.
     NotificationCenter.default.addObserver(self, selector: #selector(alertPreventScreenCapture(notification:)), name: UIApplication.userDidTakeScreenshotNotification, object: nil)
-    NotificationCenter.default.addObserver(self, selector: #selector(alertPreventScreenRecord(notification:)), name: UIScreen.capturedDidChangeNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(hideScreen(notification:)), name: UIScreen.capturedDidChangeNotification, object: nil)
   }
   
   func sceneDidEnterBackground(_ scene: UIScene) {
@@ -67,28 +68,36 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   
   // MARK: Prevent Screen Capture & Record
   @objc private func alertPreventScreenCapture(notification:Notification) -> Void {
-    let alert = UIAlertController(title: "주의", message: "화면 캡쳐를 하면 안되요!\n사진을 삭제하시겠습니까?", preferredStyle: .alert)
-    
-    alert.addAction(UIAlertAction(title: "네", style: .default, handler: { [self] _ in
+    let preventCaptureAlert = UIAlertController(title: "주의", message: "📵 화면 캡쳐를 하면 안되요!\n사진을 삭제하시겠습니까?", preferredStyle: .alert)
+    preventCaptureAlert.addAction(UIAlertAction(title: "네", style: .default, handler: { [self] _ in
       didTakeScreenshot()
     }))
-    alert.addAction(UIAlertAction(title: "아니오", style: .destructive, handler: nil))
-    self.window?.rootViewController!.present(alert, animated: true, completion: nil)
+    preventCaptureAlert.addAction(UIAlertAction(title: "아니오", style: .destructive, handler: { [self] _ in
+      alertCautionNotDeleteScreenCapture()
+    }))
+    self.window?.rootViewController!.present(preventCaptureAlert, animated: true, completion: nil)
   }
   
-  @objc private func alertPreventScreenRecord(notification:Notification) -> Void {
-    let alert = UIAlertController(title: "주의", message: "화면 녹화를 하면 안되요!", preferredStyle: .alert)
-    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-    hideScreen()
-    self.window?.rootViewController!.present(alert, animated: true, completion: nil)
+  private func alertCautionNotDeleteScreenCapture() {
+    let cautionAlert = UIAlertController(title: "주의", message: "캡쳐를 악의적으로 사용 시 책임을 물 수 있습니다.", preferredStyle: .alert)
+    cautionAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+    self.window?.rootViewController!.present(cautionAlert, animated: true, completion: nil)
   }
   
-  private func hideScreen() {
+  @objc private func hideScreen(notification:Notification) -> Void {
+    configurePreventView()
     if UIScreen.main.isCaptured {
-      window?.isHidden = true
+      window?.addSubview(preventAnnounceView)
     } else {
-      window?.isHidden = false
+      preventAnnounceView.removeFromSuperview()
+      alertPreventScreenRecord()
     }
+  }
+  
+  private func alertPreventScreenRecord() {
+    let preventRecordAlert = UIAlertController(title: "주의", message: "📵 화면 녹화를 하면 안되요", preferredStyle: .alert)
+    preventRecordAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+    self.window?.rootViewController!.present(preventRecordAlert, animated: true, completion: nil)
   }
   
   private func didTakeScreenshot() {
@@ -104,6 +113,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         print(errorMessage.localizedDescription)
       }
     }
+  }
+  
+  private func configurePreventView() {
+    preventAnnounceView.backgroundColor = .black
+    let preventAnnounceLabel = configurePreventAnnounceLabel()
+    preventAnnounceView.addSubview(preventAnnounceLabel)
+  }
+  
+  private func configurePreventAnnounceLabel() -> UILabel {
+    let preventAnnounceLabel = UILabel()
+    preventAnnounceLabel.text = "화면 녹화를 할 수 없습니다"
+    preventAnnounceLabel.font = .boldSystemFont(ofSize: 30)
+    preventAnnounceLabel.numberOfLines = 0
+    preventAnnounceLabel.textColor = .white
+    preventAnnounceLabel.textAlignment = .center
+    preventAnnounceLabel.sizeToFit()
+    preventAnnounceLabel.center.x = self.preventAnnounceView.center.x
+    preventAnnounceLabel.center.y = self.preventAnnounceView.center.y
+    
+    return preventAnnounceLabel
   }
 }
 
